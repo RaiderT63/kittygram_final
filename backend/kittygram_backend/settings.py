@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
-DEBUG = True
+DEBUG = os.environ["DEBUG"].lower()
 
 ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
 
