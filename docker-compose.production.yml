@@ -1,0 +1,38 @@
+volumes:
+  pg_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    image: raidert/kittygram_backend
+    env_file: .env
+    volumes:
+      - static:/backend_static
+      - media:/app/media
+    depends_on:
+      - db
+  frontend:
+    image: raidert/kittygram_frontend
+    env_file: .env
+    volumes:
+      - static:/static
+    depends_on:
+      - db
+    command: cp -r /app/build/. /frontend_static/
+  gateway:
+    image: raidert/kittygram_gateway
+    env_file: .env
+    ports:
+      - 9000:80
+    volumes:
+      - static:/static
+      - media:/app/media
+    depends_on:
+      - backend
+      - frontend
